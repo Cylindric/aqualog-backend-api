@@ -1,9 +1,11 @@
 import logging
+from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
+from starlette.staticfiles import StaticFiles
 
 from aqualog_api.calculation import build_calculation_router
 from aqualog_api.config import Settings, load_settings
@@ -41,6 +43,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.logger = logger
 
     app.add_middleware(RequestLoggingMiddleware, logger=logger)
+
+    if settings.app_env in {"dev", "test"}:
+        report_dir = Path(settings.test_reports_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        app.mount("/tests", StaticFiles(directory=report_dir, html=True), name="tests")
 
     versioned_prefix = f"/api/{settings.api_version}"
     app.include_router(build_health_router(app.state.readiness), prefix=versioned_prefix)

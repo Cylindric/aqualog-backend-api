@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     app_env: str
     api_version: str = "v1"
     log_level: str = "INFO"
+    test_reports_dir: str = "artifacts/tests"
 
     model_config = SettingsConfigDict(env_prefix="AQUALOG_", extra="ignore")
 

@@ -19,8 +19,17 @@ tasks:
       - .venv/bin/python main.py
 
   test:
-    desc: Run the test suite
+    desc: Run the test suite with coverage summary and HTML test report
     env:
       AQUALOG_APP_ENV: test
     cmds:
-      - .venv/bin/pytest -q
+      - mkdir -p artifacts/tests
+      - .venv/bin/pytest -q --cov=aqualog_api --cov-report=term-missing --html=artifacts/tests/index.html
+
+  coverage:
+    desc: Run tests with coverage outputs and HTML test report
+    env:
+      AQUALOG_APP_ENV: test
+    cmds:
+      - mkdir -p artifacts/tests
+      - .venv/bin/pytest -q --cov=aqualog_api --cov-report=term-missing --cov-report=html --cov-report=xml --html=artifacts/tests/index.html

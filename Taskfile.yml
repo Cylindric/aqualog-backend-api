@@ -16,6 +16,8 @@ tasks:
     env:
       AQUALOG_APP_ENV: dev
     cmds:
+      - task: test
+      - task: coverage
       - .venv/bin/python main.py
 
   test:

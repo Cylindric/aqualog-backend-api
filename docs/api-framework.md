@@ -10,6 +10,18 @@ This project exposes versioned HTTP routes under `/api/v1`.
   - `AQUALOG_LOG_LEVEL` (default: `INFO`)
 - App startup initializes readiness dependencies before reporting ready.
 
+## Container Defaults
+
+The Docker image bakes these runtime defaults:
+
+- `AQUALOG_APP_ENV=prod`
+- `AQUALOG_API_VERSION=v1`
+- `AQUALOG_LOG_LEVEL=INFO`
+
+Runtime values can override baked defaults using container environment arguments, for example:
+
+`docker run -e AQUALOG_APP_ENV=test -e AQUALOG_LOG_LEVEL=DEBUG <image>`
+
 ## Operational Endpoints
 
 - `GET /api/v1/live`

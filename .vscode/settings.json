@@ -3,6 +3,14 @@
         "openspec": true,
         "uv": true,
         ".venv/bin/pytest": true,
-        "task": true
+        "task": true,
+        "/^cd /home/mark/dev/aqua/aqualog-backend-api && docker --version$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /home/mark/dev/aqua/aqualog-backend-api && docker --version && docker info --format '\\{\\{\\.ServerVersion\\}\\}'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }

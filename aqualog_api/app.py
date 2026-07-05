@@ -37,7 +37,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         app.state.readiness.is_ready = True
         yield
 
-    app = FastAPI(title="Aqualog Backend API", lifespan=lifespan)
+    app = FastAPI(title="Aqualog Backend API", lifespan=lifespan, swagger_ui_parameters={"tryItOutEnabled": True})
     app.state.readiness = ReadinessState(is_ready=False)
     app.state.settings = settings
     app.state.logger = logger

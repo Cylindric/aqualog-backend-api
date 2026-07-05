@@ -1,0 +1,132 @@
+{
+  "stack": {
+    "languages": [
+      {
+        "name": "HTML",
+        "fileCount": 21,
+        "lineCount": 7970,
+        "percentage": 67
+      },
+      {
+        "name": "JavaScript",
+        "fileCount": 2,
+        "lineCount": 1272,
+        "percentage": 11
+      },
+      {
+        "name": "Markdown",
+        "fileCount": 22,
+        "lineCount": 1064,
+        "percentage": 9
+      },
+      {
+        "name": "CSS",
+        "fileCount": 3,
+        "lineCount": 939,
+        "percentage": 8
+      },
+      {
+        "name": "Python",
+        "fileCount": 15,
+        "lineCount": 457,
+        "percentage": 4
+      },
+      {
+        "name": "JSON",
+        "fileCount": 2,
+        "lineCount": 128,
+        "percentage": 1
+      },
+      {
+        "name": "YAML",
+        "fileCount": 7,
+        "lineCount": 46,
+        "percentage": 0
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "pip",
+    "buildTools": []
+  },
+  "structure": {
+    "rootFiles": [
+      "Taskfile.yml",
+      "coverage.xml",
+      "main.py",
+      "mise.toml",
+      "pyproject.toml",
+      "requirements.txt"
+    ],
+    "mainDirectories": [
+      {
+        "name": "openspec",
+        "purpose": "项目目录",
+        "fileCount": 28,
+        "path": "openspec"
+      },
+      {
+        "name": "artifacts",
+        "purpose": "项目目录",
+        "fileCount": 19,
+        "path": "artifacts"
+      },
+      {
+        "name": "htmlcov",
+        "purpose": "项目目录",
+        "fileCount": 16,
+        "path": "htmlcov"
+      },
+      {
+        "name": "aqualog_api",
+        "purpose": "项目目录",
+        "fileCount": 7,
+        "path": "aqualog_api"
+      },
+      {
+        "name": "tests",
+        "purpose": "测试文件",
+        "fileCount": 7,
+        "path": "tests"
+      },
+      {
+        "name": "__pycache__",
+        "purpose": "项目目录",
+        "fileCount": 1,
+        "path": "__pycache__"
+      },
+      {
+        "name": "docs",
+        "purpose": "文档",
+        "fileCount": 1,
+        "path": "docs"
+      }
+    ],
+    "entryPoints": [
+      "main.py"
+    ]
+  },
+  "patterns": {
+    "architecture": "unknown",
+    "codeStyle": [],
+    "conventions": [
+      "GitHub workflows",
+      "OpenSpec"
+    ]
+  },
+  "stats": {
+    "totalFiles": 85,
+    "totalLines": 11876,
+    "byLanguage": {
+      "HTML": 7970,
+      "JavaScript": 1272,
+      "Markdown": 1064,
+      "CSS": 939,
+      "Python": 457,
+      "JSON": 128,
+      "YAML": 46
+    }
+  },
+  "analyzedAt": "2026-07-05T21:49:29.081Z",
+  "projectRoot": "/home/mark/dev/aqua/aqualog-backend-api",
+  "projectName": "aqualog-backend-api"
+}

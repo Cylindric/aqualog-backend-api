@@ -31,5 +31,5 @@ tasks:
     env:
       AQUALOG_APP_ENV: test
     cmds:
-      - mkdir -p artifacts/tests
-      - .venv/bin/pytest -q --cov=aqualog_api --cov-report=term-missing --cov-report=html --cov-report=xml --html=artifacts/tests/index.html
+      - mkdir -p artifacts/coverage
+      - .venv/bin/pytest -q --cov=aqualog_api --cov-report=term-missing --cov-report=html:artifacts/coverage --cov-report=xml --html=artifacts/tests/index.html

@@ -45,9 +45,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(RequestLoggingMiddleware, logger=logger)
 
     if settings.app_env in {"dev", "test"}:
-        report_dir = Path(settings.test_reports_dir)
-        report_dir.mkdir(parents=True, exist_ok=True)
-        app.mount("/tests", StaticFiles(directory=report_dir, html=True), name="tests")
+        test_report_dir = Path(settings.test_reports_dir)
+        test_report_dir.mkdir(parents=True, exist_ok=True)
+        app.mount("/tests", StaticFiles(directory=test_report_dir, html=True), name="tests")
+
+        coverage_report_dir = Path(settings.coverage_reports_dir)
+        coverage_report_dir.mkdir(parents=True, exist_ok=True)
+        app.mount(
+            "/coverage",
+            StaticFiles(directory=coverage_report_dir, html=True),
+            name="coverage",
+        )
 
     versioned_prefix = f"/api/{settings.api_version}"
     app.include_router(build_health_router(app.state.readiness), prefix=versioned_prefix)

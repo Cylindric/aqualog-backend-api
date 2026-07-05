@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     api_version: str = "v1"
     log_level: str = "INFO"
     test_reports_dir: str = "artifacts/tests"
+    coverage_reports_dir: str = "artifacts/coverage"
 
     model_config = SettingsConfigDict(env_prefix="AQUALOG_", extra="ignore")
 

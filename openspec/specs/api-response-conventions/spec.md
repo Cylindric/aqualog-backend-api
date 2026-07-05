@@ -51,3 +51,10 @@ The salinity dose calculation endpoint SHALL return success and error payloads u
 #### Scenario: Salinity responses include correlation reference
 - **WHEN** `/calculate/dose/salinity` returns either success or error
 - **THEN** the response envelope includes a correlation identifier or reference field
+
+### Requirement: Serving coverage reports does not alter API response contracts
+Serving coverage artifacts MUST NOT change established JSON envelope behavior of existing API endpoints.
+
+#### Scenario: Existing API health endpoints remain unchanged
+- **WHEN** health endpoints are requested after adding `/coverage` static serving
+- **THEN** they continue returning the same status behavior and JSON envelope format

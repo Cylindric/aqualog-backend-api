@@ -5,6 +5,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 
+from aqualog_api.calculation import build_calculation_router
 from aqualog_api.config import Settings, load_settings
 from aqualog_api.health import ReadinessState, build_health_router
 from aqualog_api.logging_middleware import RequestLoggingMiddleware
@@ -43,6 +44,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     versioned_prefix = f"/api/{settings.api_version}"
     app.include_router(build_health_router(app.state.readiness), prefix=versioned_prefix)
+    app.include_router(build_calculation_router(), prefix=versioned_prefix)
 
     @app.get("/")
     async def root(request: Request):

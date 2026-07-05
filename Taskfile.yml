@@ -11,6 +11,17 @@ tasks:
     cmds:
       - uv pip install -r requirements.txt
 
+  build:
+    desc: Build the project
+    cmds:
+      - cmd: docker build -t aqualog-backend-api:latest .
+
+  publish:
+    desc: Publish the project to Docker Hub
+    cmds:
+      - cmd: docker tag aqualog-backend-api:latest cylindric/aqualog:api-latest
+      - cmd: docker push cylindric/aqualog:api-latest
+
   server:
     desc: Start the API server locally
     env:
@@ -18,7 +29,7 @@ tasks:
     cmds:
       - task: test
       - task: coverage
-      - .venv/bin/python main.py
+      - cmd: uvicorn aqualog_api.app:create_app --factory --host 0.0.0.0 --port 8000
 
   test:
     desc: Run the test suite with coverage summary and HTML test report

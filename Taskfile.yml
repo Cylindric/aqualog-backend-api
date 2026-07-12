@@ -11,22 +11,6 @@ tasks:
     cmds:
       - cmd: ./tools/setup.sh
 
-  init:
-    desc: Initialize the environment
-    silent: true
-    cmds:
-      - cmd: uv sync --dev
-      - cmd: |
-          if [ ! -f .env ]; then
-            echo "Creating .env file with default values..."
-            cp .env.example .env
-            echo "PG_PASS=$(openssl rand -base64 36 | tr -d '\n')" >> .env
-            echo "AUTHENTIK_SECRET_KEY=$(openssl rand -base64 60 | tr -d '\n')" >> .env
-          fi
-      - cmd: mkdir -p .data/authentik/data
-      - cmd: mkdir -p .data/authentik/certs
-      - cmd: mkdir -p .data/authentik/custom-templates
-
   build:
     desc: Build the project
     cmds:
@@ -57,7 +41,7 @@ tasks:
     cmds:
       # - task: test
       # - task: coverage
-      - cmd: uvicorn aqualog_api.app:create_app --reload --factory --host 0.0.0.0 --port 8000
+      - cmd: poetry run uvicorn aqualog_api.app:create_app --reload --factory --host 0.0.0.0 --port 8000
 
   auth-check:
     desc: Validate Authentik token issuance and API authentication without inline secrets

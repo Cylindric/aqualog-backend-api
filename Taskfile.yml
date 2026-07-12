@@ -6,6 +6,11 @@ tasks:
     cmds:
       - task --list
 
+  setup:
+    desc: Set up the project environment
+    cmds:
+      - cmd: ./tools/setup.sh
+
   init:
     desc: Initialize the environment
     silent: true

@@ -25,7 +25,8 @@ tasks:
     desc: Build the project
     cmds:
       - cmd: poetry lock
-      - cmd: docker build -t {{.ContainerName}}:{{.Version}} .
+      - cmd: docker build -t {{.ContainerName}}:latest .
+      - cmd: docker image tag {{.ContainerName}}:latest {{.ContainerName}}:{{.Version}}
 
   scan:
     desc: Run Trivy scan for vulnerabilities
@@ -88,16 +89,9 @@ tasks:
 
   auth-check:
     desc: Validate Authentik token issuance and API authentication without inline secrets
-    env:
-      ISSUER: "{{.AQUALOG_OAUTH_ISSUER_URL}}"
-      TOKEN_ENDPOINT: "https://auth.aqualog.home.cylindric.net/application/o/token/"
-      API_URL: "http://localhost:8000/api/v1/calculate/dose/salinity?volume=100&current=30&target=35"
-      REQUESTS_CA_BUNDLE: "/etc/ssl/certs/ca-certificates.crt"
-      SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
-      CURL_CA_BUNDLE: /etc/ssl/certs/ca-certificates.crt
-    dir: ./useful_tools
+    dir: ./tools/spa
     cmds:
-      - cmd: ./test.sh
+      - cmd: ./provider-aqualog-spa-dev.sh
 
   test:
     desc: Run the test suite with coverage summary and HTML test report

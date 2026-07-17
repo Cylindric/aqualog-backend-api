@@ -29,13 +29,13 @@ jobs:
         run: |
           git push origin main --tags
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: "body.md"
-          tag_name: ${{ env.REVISION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     body_path: "CHANGELOG.md"
+      #     tag_name: ${{ env.REVISION }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Version
         run: echo "Bumped to version ${{ steps.cz.outputs.version }}"

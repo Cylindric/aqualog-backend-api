@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 from starlette.staticfiles import StaticFiles
 
+from aqualog_api.aquariums import build_aquarium_router
 from aqualog_api.calculation import build_calculation_router
 from aqualog_api.config import Settings, load_settings
 from aqualog_api.db import init_database
@@ -71,6 +72,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(build_health_router(app.state.readiness), prefix=versioned_prefix)
     app.include_router(build_calculation_router(), prefix=versioned_prefix)
     app.include_router(build_profile_router(), prefix=versioned_prefix)
+    app.include_router(build_aquarium_router(), prefix=versioned_prefix)
 
     @app.get("/")
     async def root(request: Request):

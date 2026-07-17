@@ -28,6 +28,12 @@ tasks:
       - cmd: docker build -t {{.ContainerName}}:latest .
       - cmd: docker image tag {{.ContainerName}}:latest {{.ContainerName}}:{{.Version}}
 
+  publish:
+    desc: Publish the docker image to the registry
+    cmds:
+      - cmd: docker push {{.ContainerName}}:{{.Version}}
+      - cmd: docker push {{.ContainerName}}:latest
+
   scan:
     desc: Run Trivy scan for vulnerabilities
     cmds:

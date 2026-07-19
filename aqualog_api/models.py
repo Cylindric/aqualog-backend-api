@@ -64,3 +64,30 @@ class Aquarium(Base):
         default=_utc_now,
         onupdate=_utc_now,
     )
+
+
+class AquariumMeasurement(Base):
+    __tablename__ = "aquarium_measurements"
+    __table_args__ = (
+        UniqueConstraint(
+            "aquarium_id",
+            "parameter",
+            "measured_at",
+            name="uq_aquarium_measurements_aquarium_parameter_measured_at",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    aquarium_id: Mapped[str] = mapped_column(
+        String(36),
+        ForeignKey("aquariums.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    parameter: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    value: Mapped[float] = mapped_column(Float, nullable=False)
+    unit: Mapped[str] = mapped_column(String(16), nullable=False)
+    raw_value: Mapped[float] = mapped_column(Float, nullable=False)
+    raw_unit: Mapped[str] = mapped_column(String(16), nullable=False)
+    measured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=_utc_now)

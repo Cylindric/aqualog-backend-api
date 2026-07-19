@@ -139,3 +139,9 @@ tasks:
     desc: Run the backend container
     cmds:
       - cmd: docker run --network=backend_default --env-file .env --rm -it {{.ContainerName}}:{{.Version}}
+
+  token:
+    desc: Generate a new Authentik token for API authentication
+    silent: true
+    cmds:
+      - cmd: ./tools/get_token-dev.sh

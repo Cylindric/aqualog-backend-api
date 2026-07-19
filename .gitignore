@@ -11,3 +11,4 @@ coverage.xml
 .data
 .env
 aqualog_api.egg-info
+fastapi.log

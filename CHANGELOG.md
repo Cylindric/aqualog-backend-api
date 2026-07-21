@@ -64,6 +64,12 @@
 - bump pytest-html from 4.1.1 to 4.2.0
 - remove redundant main.py
 
+## v0.5.0 (2026-07-21)
+
+### Feat
+
+- add mail smtp-to-api proxy
+
 ## v0.4.2 (2026-07-19)
 
 ### Fix

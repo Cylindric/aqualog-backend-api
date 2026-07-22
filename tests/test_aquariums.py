@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
+from src.app import create_app
+from src.config import Settings
 
 
 @pytest.fixture
@@ -36,7 +36,7 @@ def test_aquarium_crud_happy_path(create_valid_token, auth_settings, mock_jwks):
     token = create_valid_token(sub="aquarium-owner", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             create_response = client.post(
@@ -87,7 +87,7 @@ def test_aquarium_cross_user_access_is_not_found(create_valid_token, auth_settin
     other_token = create_valid_token(sub="other", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             create_response = client.post(
@@ -118,7 +118,7 @@ def test_aquarium_validation_and_units(create_valid_token, auth_settings, mock_j
     token = create_valid_token(sub="validation-owner", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             short_type = client.post(
@@ -159,7 +159,7 @@ def test_aquarium_name_unique_per_user(create_valid_token, auth_settings, mock_j
     second_user_token = create_valid_token(sub="user-2", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             first = client.post(
@@ -190,7 +190,7 @@ def test_create_aquarium_logs_debug_context(create_valid_token, auth_settings, m
     mock_logger = MagicMock()
     app.state.logger = mock_logger
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             response = client.post(

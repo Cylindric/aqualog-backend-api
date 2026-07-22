@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
+from src.app import create_app
+from src.config import Settings
 
 
 @pytest.fixture
@@ -21,7 +21,7 @@ def test_get_my_profile_returns_current_user_profile(create_valid_token, auth_se
     token = create_valid_token(sub="profile-user", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             response = client.get(
@@ -41,7 +41,7 @@ def test_patch_my_profile_updates_allowed_fields(create_valid_token, auth_settin
     token = create_valid_token(sub="profile-user-2", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             response = client.patch(
@@ -61,7 +61,7 @@ def test_patch_my_profile_rejects_disallowed_fields(create_valid_token, auth_set
     token = create_valid_token(sub="profile-user-3", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             response = client.patch(

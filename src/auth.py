@@ -11,10 +11,10 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
-from aqualog_api.config import Settings, load_settings
-from aqualog_api.db import get_session
-from aqualog_api.user_repository import UserRepository
-from aqualog_api.user_service import AuthenticatedUser, resolve_or_create_authenticated_user
+from src.config import Settings, load_settings
+from src.db import get_session
+from src.user_repository import UserRepository
+from src.user_service import AuthenticatedUser, resolve_or_create_authenticated_user
 
 logger = logging.getLogger(__name__)
 

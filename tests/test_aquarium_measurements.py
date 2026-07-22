@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
+from src.app import create_app
+from src.config import Settings
 
 
 @pytest.fixture
@@ -46,7 +46,7 @@ def test_salinity_measurement_create_list_happy_path(create_valid_token, auth_se
     token = create_valid_token(sub="measure-owner", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             aquarium_id = _create_aquarium(client, token)
@@ -101,7 +101,7 @@ def test_salinity_measurement_duplicate_timestamp_and_cross_user(create_valid_to
     other_token = create_valid_token(sub="other", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             aquarium_id = _create_aquarium(client, owner_token)
@@ -136,7 +136,7 @@ def test_salinity_measurement_validation_errors(create_valid_token, auth_setting
     token = create_valid_token(sub="validator", aud="test-client-id")
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             aquarium_id = _create_aquarium(client, token)
@@ -168,3 +168,171 @@ def test_salinity_measurement_validation_errors(create_valid_token, auth_setting
                 json={"unit": "ppt", "value": 35.0, "measured_at": "2026-07-01T12:00:00"},
             )
             assert missing_timezone.status_code == 422
+
+
+def test_measurement_create_phosphate_happy_path_with_parameter_normalization(
+    create_valid_token,
+    auth_settings,
+    mock_jwks,
+):
+    token = create_valid_token(sub="phosphate-owner", aud="test-client-id")
+    app = create_app(auth_settings)
+
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
+        mock_get_keys.return_value = mock_jwks
+        with TestClient(app) as client:
+            aquarium_id = _create_aquarium(client, token)
+
+            create_response = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                json={
+                    "parameter": "  PhOsPhAtE  ",
+                    "unit": "PPM",
+                    "value": 0.08,
+                    "measured_at": "2026-07-01T12:00:00.987654Z",
+                },
+            )
+            assert create_response.status_code == 201
+            created = create_response.json()["data"]
+            assert created["parameter"] == "phosphate"
+            assert created["unit"] == "ppm"
+            assert created["raw_unit"] == "ppm"
+            assert created["value"] == pytest.approx(0.08)
+            assert created["raw_value"] == pytest.approx(0.08)
+            assert created["measured_at"] == "2026-07-01T12:00:00+00:00"
+
+
+def test_measurement_create_phosphate_validation_and_duplicate_errors(
+    create_valid_token,
+    auth_settings,
+    mock_jwks,
+):
+    token = create_valid_token(sub="phosphate-validator", aud="test-client-id")
+    app = create_app(auth_settings)
+
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
+        mock_get_keys.return_value = mock_jwks
+        with TestClient(app) as client:
+            aquarium_id = _create_aquarium(client, token)
+
+            unsupported_unit = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                json={
+                    "parameter": "phosphate",
+                    "unit": "mg/L",
+                    "value": 0.08,
+                    "measured_at": "2026-07-01T12:00:00Z",
+                },
+            )
+            assert unsupported_unit.status_code == 422
+
+            invalid_value = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                json={
+                    "parameter": "phosphate",
+                    "unit": "ppm",
+                    "value": 101.0,
+                    "measured_at": "2026-07-01T12:00:00Z",
+                },
+            )
+            assert invalid_value.status_code == 422
+
+            created = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                json={
+                    "parameter": "phosphate",
+                    "unit": "ppm",
+                    "value": 0.08,
+                    "measured_at": "2026-07-01T12:00:00.950000Z",
+                },
+            )
+            assert created.status_code == 201
+
+            duplicate = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                json={
+                    "parameter": " PHOSPHATE ",
+                    "unit": "ppm",
+                    "value": 0.09,
+                    "measured_at": "2026-07-01T12:00:00.100000Z",
+                },
+            )
+            assert duplicate.status_code == 409
+
+
+def test_measurement_history_supports_all_or_single_parameter_filter(
+    create_valid_token,
+    auth_settings,
+    mock_jwks,
+):
+    token = create_valid_token(sub="history-owner", aud="test-client-id")
+    app = create_app(auth_settings)
+
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
+        mock_get_keys.return_value = mock_jwks
+        with TestClient(app) as client:
+            aquarium_id = _create_aquarium(client, token)
+
+            salinity = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements/salinity",
+                headers=_auth_header(token),
+                json={"unit": "ppt", "value": 35.0, "measured_at": "2026-07-01T12:00:00Z"},
+            )
+            assert salinity.status_code == 201
+
+            phosphate = client.post(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                json={
+                    "parameter": "phosphate",
+                    "unit": "ppm",
+                    "value": 0.08,
+                    "measured_at": "2026-07-01T12:05:00Z",
+                },
+            )
+            assert phosphate.status_code == 201
+
+            all_results = client.get(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+            )
+            assert all_results.status_code == 200
+            assert [row["parameter"] for row in all_results.json()["data"]] == ["salinity", "phosphate"]
+
+            phosphate_only = client.get(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                params={"parameter": " PhOsPhAtE "},
+            )
+            assert phosphate_only.status_code == 200
+            assert len(phosphate_only.json()["data"]) == 1
+            assert phosphate_only.json()["data"][0]["parameter"] == "phosphate"
+
+
+def test_measurement_history_rejects_multi_parameter_filter(create_valid_token, auth_settings, mock_jwks):
+    token = create_valid_token(sub="history-filter", aud="test-client-id")
+    app = create_app(auth_settings)
+
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
+        mock_get_keys.return_value = mock_jwks
+        with TestClient(app) as client:
+            aquarium_id = _create_aquarium(client, token)
+
+            repeated_param = client.get(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                params=[("parameter", "salinity"), ("parameter", "phosphate")],
+            )
+            assert repeated_param.status_code == 422
+
+            compound_param = client.get(
+                f"/api/v1/aquariums/{aquarium_id}/measurements",
+                headers=_auth_header(token),
+                params={"parameter": "salinity,phosphate"},
+            )
+            assert compound_param.status_code == 422

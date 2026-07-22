@@ -82,7 +82,7 @@ tasks:
       - cmd: poetry lock
       - cmd: poetry sync
       - task: db-migrate
-      - cmd: poetry run uvicorn aqualog_api.app:create_app --reload --factory --host 0.0.0.0 --port 8001
+      - cmd: poetry run uvicorn src.app:create_app --reload --factory --host 0.0.0.0 --port 8001
 
   db-migrate:
     desc: Run pending database migrations
@@ -106,7 +106,7 @@ tasks:
       AQUALOG_APP_ENV: test
     cmds:
       - mkdir -p artifacts/tests
-      - .venv/bin/pytest -q --cov=aqualog_api --cov-report=term-missing --html=artifacts/tests/index.html
+      - .venv/bin/pytest -q --cov=src --cov-report=term-missing --html=artifacts/tests/index.html
 
   coverage:
     desc: Run tests with coverage outputs and HTML test report
@@ -114,7 +114,7 @@ tasks:
       AQUALOG_APP_ENV: test
     cmds:
       - mkdir -p artifacts/coverage
-      - .venv/bin/pytest -q --cov=aqualog_api --cov-report=term-missing --cov-report=html:artifacts/coverage --cov-report=xml --html=artifacts/tests/index.html
+      - .venv/bin/pytest -q --cov=src --cov-report=term-missing --cov-report=html:artifacts/coverage --cov-report=xml --html=artifacts/tests/index.html
 
   clean:
     desc: Clean up build artifacts and temporary files

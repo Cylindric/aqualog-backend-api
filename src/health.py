@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from fastapi import APIRouter, Request
 
-from aqualog_api.responses import success_response
+from src.responses import success_response
 
 
 @dataclass

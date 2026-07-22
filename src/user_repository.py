@@ -3,7 +3,7 @@ from __future__ import annotations
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from aqualog_api.models import User
+from src.models import User
 
 
 class UserRepository:

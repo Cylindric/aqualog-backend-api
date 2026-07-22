@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, patch
 from fastapi import HTTPException, status
 from authlib.jose import JsonWebToken
 
-from aqualog_api.auth import validate_token, get_current_user
-from aqualog_api.config import Settings
+from src.auth import validate_token, get_current_user
+from src.config import Settings
 
 
 @pytest.fixture
@@ -30,7 +30,7 @@ class TestValidateToken:
         """Test that valid tokens are accepted."""
         token = create_valid_token(sub="user123", aud="test-client-id")
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             claims = await validate_token(token, auth_settings)
@@ -44,7 +44,7 @@ class TestValidateToken:
         """Test that expired tokens are rejected."""
         token = create_expired_token()
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with pytest.raises(ValueError, match="expired|Token"):
@@ -68,7 +68,7 @@ class TestValidateToken:
         token = jwt.encode({"alg": "RS256"}, claims, private_key)
         token = token.decode() if isinstance(token, bytes) else token
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with pytest.raises(ValueError, match="issuer"):
@@ -80,7 +80,7 @@ class TestValidateToken:
         # Create token with wrong audience
         token = create_valid_token(aud="wrong-audience")
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with pytest.raises(ValueError, match="audience"):
@@ -89,7 +89,7 @@ class TestValidateToken:
     @pytest.mark.asyncio
     async def test_validate_token_with_missing_token(self, auth_settings, mock_jwks):
         """Test that missing/empty tokens are rejected."""
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with pytest.raises(ValueError):
@@ -98,7 +98,7 @@ class TestValidateToken:
     @pytest.mark.asyncio
     async def test_validate_token_with_malformed_token(self, auth_settings, mock_jwks):
         """Test that malformed tokens are rejected."""
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with pytest.raises(ValueError):
@@ -112,12 +112,12 @@ class TestGetCurrentUser:
     async def test_get_current_user_with_valid_credentials_via_endpoint(self, create_valid_token, auth_settings, mock_jwks):
         """Test that valid credentials are accepted via HTTP endpoint."""
         from fastapi.testclient import TestClient
-        from aqualog_api.app import create_app
+        from src.app import create_app
         
         token = create_valid_token(sub="user123")
         app = create_app(auth_settings)
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with TestClient(app) as client:
@@ -136,11 +136,11 @@ class TestGetCurrentUser:
     async def test_get_current_user_with_invalid_credentials_via_endpoint(self, auth_settings, mock_jwks):
         """Test that invalid credentials are rejected via HTTP endpoint."""
         from fastapi.testclient import TestClient
-        from aqualog_api.app import create_app
+        from src.app import create_app
         
         app = create_app(auth_settings)
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with TestClient(app) as client:
@@ -159,12 +159,12 @@ class TestGetCurrentUser:
     async def test_get_current_user_with_expired_token_via_endpoint(self, create_expired_token, auth_settings, mock_jwks):
         """Test that expired tokens are rejected via HTTP endpoint."""
         from fastapi.testclient import TestClient
-        from aqualog_api.app import create_app
+        from src.app import create_app
         
         token = create_expired_token()
         app = create_app(auth_settings)
 
-        with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+        with patch("src.auth.get_jwks_keys") as mock_get_keys:
             mock_get_keys.return_value = mock_jwks
             
             with TestClient(app) as client:

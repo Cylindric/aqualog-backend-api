@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from aqualog_api.aquarium_repository import AquariumRepository, DuplicateAquariumNameError
-from aqualog_api.db import Base
-from aqualog_api.user_repository import UserRepository
+from src.aquarium_repository import AquariumRepository, DuplicateAquariumNameError
+from src.db import Base
+from src.user_repository import UserRepository
 
 
 def _build_repos(tmp_path):

@@ -12,15 +12,15 @@ from fastapi.responses import FileResponse
 from pydantic import ValidationError
 from starlette.staticfiles import StaticFiles
 
-from aqualog_api.aquariums import build_aquarium_router
-from aqualog_api.aquarium_measurements import build_aquarium_measurement_router
-from aqualog_api.calculation import build_calculation_router
-from aqualog_api.config import Settings, load_settings
-from aqualog_api.db import init_database
-from aqualog_api.health import ReadinessState, build_health_router
-from aqualog_api.logging_middleware import RequestLoggingMiddleware
-from aqualog_api.profile import build_profile_router
-from aqualog_api.responses import error_response, success_response
+from src.aquariums import build_aquarium_router
+from src.aquarium_measurements import build_aquarium_measurement_router
+from src.calculation import build_calculation_router
+from src.config import Settings, load_settings
+from src.db import init_database
+from src.health import ReadinessState, build_health_router
+from src.logging_middleware import RequestLoggingMiddleware
+from src.profile import build_profile_router
+from src.responses import error_response, success_response
 
 # Custom JSON formatter
 

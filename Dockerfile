@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir poetry && \
 COPY tools/entrypoint.sh /app/entrypoint.sh
 COPY alembic.ini /app/alembic.ini
 COPY alembic /app/alembic
-COPY aqualog_api ./aqualog_api
+COPY src ./src
 
 EXPOSE 8000
 

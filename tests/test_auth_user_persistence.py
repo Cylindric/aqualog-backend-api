@@ -3,8 +3,8 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
+from src.app import create_app
+from src.config import Settings
 
 
 def test_first_login_creates_user_and_second_login_reuses_same_user(
@@ -22,7 +22,7 @@ def test_first_login_creates_user_and_second_login_reuses_same_user(
     app = create_app(settings)
     token = create_valid_token(sub="persisted-user", aud="test-client-id")
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         with TestClient(app) as client:
             first = client.get(

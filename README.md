@@ -63,7 +63,7 @@ curl -H "Authorization: Bearer <token>" \
 Run tests with:
 
 ```bash
-pytest -q --cov=aqualog_api --cov-report=term-missing
+pytest -q --cov=src --cov-report=term-missing
 ```
 
 All endpoints are tested with mock OAuth2 tokens. The test suite includes:

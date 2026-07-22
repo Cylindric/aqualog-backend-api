@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 
-from aqualog_api.auth import get_current_user
-from aqualog_api.responses import success_response
-from aqualog_api.user_service import AuthenticatedUser
+from src.auth import get_current_user
+from src.responses import success_response
+from src.user_service import AuthenticatedUser
 
 GRAMS_PER_LITER_PER_PPT = 1.1  # grams per liter per ppt of salinity change
 

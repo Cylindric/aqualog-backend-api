@@ -3,7 +3,7 @@ from __future__ import annotations
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from aqualog_api.models import Aquarium
+from src.models import Aquarium
 
 
 class DuplicateAquariumNameError(ValueError):

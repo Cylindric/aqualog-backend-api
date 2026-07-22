@@ -4,12 +4,12 @@ from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy.orm import Session
 
-from aqualog_api.aquarium_repository import AquariumRepository, DuplicateAquariumNameError
-from aqualog_api.auth import get_current_user
-from aqualog_api.db import get_session
-from aqualog_api.models import Aquarium
-from aqualog_api.responses import success_response
-from aqualog_api.user_service import AuthenticatedUser
+from src.aquarium_repository import AquariumRepository, DuplicateAquariumNameError
+from src.auth import get_current_user
+from src.db import get_session
+from src.models import Aquarium
+from src.responses import success_response
+from src.user_service import AuthenticatedUser
 
 GALLON_US_TO_LITER = 3.785411784
 SUPPORTED_VOLUME_UNITS = {"L", "gal_us"}

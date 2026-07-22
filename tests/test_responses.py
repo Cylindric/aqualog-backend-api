@@ -2,9 +2,9 @@ from fastapi import APIRouter, FastAPI
 from fastapi.testclient import TestClient
 from pydantic import BaseModel
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
-from aqualog_api.responses import success_response
+from src.app import create_app
+from src.config import Settings
+from src.responses import success_response
 
 
 class InputModel(BaseModel):

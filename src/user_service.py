@@ -3,8 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from aqualog_api.models import User
-from aqualog_api.user_repository import UserRepository
+from src.models import User
+from src.user_repository import UserRepository
 
 
 @dataclass

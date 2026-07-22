@@ -1,8 +1,8 @@
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings, load_settings
+from src.app import create_app
+from src.config import Settings, load_settings
 
 
 def test_missing_required_config_fails_fast(monkeypatch):

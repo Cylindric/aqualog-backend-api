@@ -2,8 +2,8 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
+from src.app import create_app
+from src.config import Settings
 
 
 def test_tests_route_serves_generated_report_index(tmp_path: Path):

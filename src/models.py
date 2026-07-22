@@ -6,7 +6,7 @@ from uuid import uuid4
 from sqlalchemy import DateTime, Float, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
-from aqualog_api.db import Base
+from src.db import Base
 
 
 def _utc_now() -> datetime:

@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from aqualog_api.db import Base
-from aqualog_api.user_repository import UserRepository
+from src.db import Base
+from src.user_repository import UserRepository
 
 
 def _build_repo(tmp_path):

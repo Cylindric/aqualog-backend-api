@@ -8,7 +8,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.engine.url import make_url
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-from aqualog_api.config import Settings
+from src.config import Settings
 
 
 class Base(DeclarativeBase):
@@ -64,7 +64,7 @@ def configure_database(settings: Settings) -> None:
 
 def init_database(settings: Settings) -> None:
     # Import models here so metadata is complete before any create_all calls.
-    from aqualog_api import models  # noqa: F401
+    from src import models  # noqa: F401
 
     configure_database(settings)
     if _engine is None:

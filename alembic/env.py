@@ -7,9 +7,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from aqualog_api.config import load_settings
-from aqualog_api.db import Base
-from aqualog_api.models import User  # noqa: F401
+from src.config import load_settings
+from src.db import Base
+from src.models import User  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", os.getenv("AQUALOG_DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/aqualog"))

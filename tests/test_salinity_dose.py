@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from aqualog_api.app import create_app
-from aqualog_api.config import Settings
+from src.app import create_app
+from src.config import Settings
 
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def test_salinity_dose_returns_expected_quantity_in_success_envelope(
     app = create_app(auth_settings)
     token = create_valid_token(sub="test-user", aud="test-client-id")
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         
         with TestClient(app) as client:
@@ -53,7 +53,7 @@ def test_salinity_dose_allows_negative_quantity_when_target_below_current(
     app = create_app(auth_settings)
     token = create_valid_token(sub="test-user", aud="test-client-id")
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         
         with TestClient(app) as client:
@@ -79,7 +79,7 @@ def test_salinity_dose_missing_or_invalid_params_return_standard_error_envelope(
     app = create_app(auth_settings)
     token = create_valid_token(sub="test-user", aud="test-client-id")
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         
         with TestClient(app) as client:
@@ -135,7 +135,7 @@ def test_salinity_dose_rejects_invalid_token(auth_settings, mock_jwks):
     """Test that salinity dose endpoint rejects invalid tokens."""
     app = create_app(auth_settings)
 
-    with patch("aqualog_api.auth.get_jwks_keys") as mock_get_keys:
+    with patch("src.auth.get_jwks_keys") as mock_get_keys:
         mock_get_keys.return_value = mock_jwks
         
         with TestClient(app) as client:

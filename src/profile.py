@@ -4,12 +4,12 @@ from fastapi import APIRouter, Body, Depends, Request
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
-from aqualog_api.auth import get_current_user
-from aqualog_api.db import get_session
-from aqualog_api.models import User
-from aqualog_api.responses import success_response
-from aqualog_api.user_repository import UserRepository
-from aqualog_api.user_service import AuthenticatedUser
+from src.auth import get_current_user
+from src.db import get_session
+from src.models import User
+from src.responses import success_response
+from src.user_repository import UserRepository
+from src.user_service import AuthenticatedUser
 
 
 class UserProfile(BaseModel):

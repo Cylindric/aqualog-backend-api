@@ -7,4 +7,4 @@ export AQUALOG_DATABASE_URL=$(eval echo "$AQUALOG_DATABASE_URL")
 # env | grep ^AQUALOG_
 
 alembic upgrade head
-uvicorn aqualog_api.app:create_app --factory --reload --host 0.0.0.0 --port 8000
+uvicorn src.app:create_app --factory --reload --host 0.0.0.0 --port 8000
